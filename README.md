@@ -19,12 +19,17 @@ Upload `.txt` or `.pdf` files, and chat with an AI assistant that retrieves cont
 ---
 ## 🚀 Usage
   1. Start the backend
-       `uvicorn app1:app --reload --port 8000` This launches the server.
+       `uvicorn app1:app --reload --port 8000`
+
+     This launches the server.
    
-  2. Open the UI
-       `Open portal.html in your browser.`
+  3. Open the UI
+     
+       `Open portal.html in the browser.`
+     
        `Upload .txt or .pdf files.`
-       `Start chatting with the RAG assistant.`
+     
+       `Start chatting with the RAG assistant`.
 
 ## 📦 Installation
 Clone the repo and install dependencies:
@@ -33,6 +38,8 @@ Clone the repo and install dependencies:
 git clone https://github.com/ambrose-kutti/UI-Based-RAG.git
 cd UI-Based-RAG
 pip install -r requirements.txt
+# for running the app.py file
+uvicorn app:app --reload --port 8000   (replace ur first app with your file name)
 
 
 
