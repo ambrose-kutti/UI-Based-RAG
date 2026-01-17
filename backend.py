@@ -58,9 +58,9 @@ def load_ui_documents():
         if os.path.exists("ui_documents.json"):
             with open("ui_documents.json", "r") as f:
                 ui_documents = json.load(f)
-                print(f"📂 Loaded {len(ui_documents)} UI documents from storage")
+                print(f"Loaded {len(ui_documents)} UI documents from storage")
     except Exception as e:
-        print(f"⚠️ Error loading UI documents: {e}")
+        print(f"Error loading UI documents: {e}")
         ui_documents = []
 
 def save_ui_documents():
@@ -68,7 +68,7 @@ def save_ui_documents():
         with open("ui_documents.json", "w") as f:
             json.dump(ui_documents, f)
     except Exception as e:
-        print(f"⚠️ Error saving UI documents: {e}")
+        print(f"Error saving UI documents: {e}")
 
 # Initialize ChromaDB collection for embeddings
 try:
@@ -79,16 +79,13 @@ try:
             model_name="all-MiniLM-L6-v2"
         )
     )
-    print(f"✅ ChromaDB initialized. Documents in collection: {collection.count()}")
+    print(f"ChromaDB initialized. Documents in collection: {collection.count()}")
 except Exception as e:
-    print(f"❌ ChromaDB initialization error: {e}")
+    print(f"ChromaDB initialization error: {e}")
     collection = None
-
-# Load UI documents on startup
-load_ui_documents()
-
-# Thread pool for parallel processing - ADDED FOR MULTI-UPLOAD
-executor = ThreadPoolExecutor(max_workers=4)
+    
+load_ui_documents()    # Load UI documents on startup
+executor = ThreadPoolExecutor(max_workers=4)    # Thread pool for parallel processing - ADDED FOR MULTI-UPLOAD
 
 def print_banner():
     print("=" * 60)
@@ -100,7 +97,6 @@ def print_banner():
     print(f"Embedding model: all-MiniLM-L6-v2")
     print(f"Ollama enabled: {OLLAMA_ENABLED}")
     print("=" * 60)
-
 print_banner()
 
 @app.get("/")
@@ -114,11 +110,8 @@ def process_single_file(file: UploadFile, file_index: int, total_files: int):  #
     print(f"\n  [{file_index}/{total_files}] Processing: {file.filename}")
     
     start_time = time.time()
-    
-    # Read file content
-    file_content = file.file.read()
+    file_content = file.file.read()        # Read file content
     file.file.seek(0)  # Reset file pointer
-    
     # Extract text
     is_pdf = file.filename.lower().endswith('.pdf')
     text = ""
@@ -127,13 +120,13 @@ def process_single_file(file: UploadFile, file_index: int, total_files: int):  #
         try:
             with pdfplumber.open(file.file) as pdf:
                 num_pages = len(pdf.pages)
-                print(f"  📑 {file.filename}: {num_pages} pages")
+                print(f" {file.filename}: {num_pages} pages")
                 for page_num, page in enumerate(pdf.pages, 1):
                     page_text = page.extract_text()
                     if page_text:
                         text += f"--- Page {page_num} ---\n{page_text}\n\n"
         except Exception as e:
-            print(f"  ❌ PDF processing error for {file.filename}: {e}")
+            print(f" PDF processing error for {file.filename}: {e}")
             raise
     else:
         try:
@@ -142,7 +135,7 @@ def process_single_file(file: UploadFile, file_index: int, total_files: int):  #
             text = file_content.decode("latin-1", errors="ignore")
     
     if not text.strip():
-        print(f"  ⚠️ Warning: No text extracted from {file.filename}")
+        print(f"Warning: No text extracted from {file.filename}")
         return None
     
     # Create document record
@@ -177,13 +170,10 @@ def process_single_file(file: UploadFile, file_index: int, total_files: int):  #
                     }]
                 )
             except Exception as e:
-                print(f"    ⚠️ Error storing chunk {idx}: {e}")
-    
+                print(f"Error storing chunk {idx}: {e}")
     end_time = time.time()
     processing_time = end_time - start_time
-    
-    print(f"  ✅ Processed: {file.filename} ({len(text)} chars, {processing_time:.2f}s)")
-    
+    print(f"Processed: {file.filename} ({len(text)} chars, {processing_time:.2f}s)")
     return ui_document
 
 @app.post("/upload")
@@ -191,7 +181,6 @@ async def upload_file(file: UploadFile = File(...)):
     print("\n" + "=" * 60)
     print(f"[{datetime.now().strftime('%H:%M:%S')}] 📥 SINGLE FILE UPLOAD")
     print(f"File: {file.filename}")
-    
     start_time = time.time()
     
     # Read file content
@@ -201,32 +190,32 @@ async def upload_file(file: UploadFile = File(...)):
     # Extract text
     text = ""
     if is_pdf:
-        print("📄 Processing PDF file...")
+        print("Processing PDF file...")
         try:
             import io
             file_stream = io.BytesIO(content)
             with pdfplumber.open(file_stream) as pdf:
                 num_pages = len(pdf.pages)
-                print(f"📑 PDF has {num_pages} pages")
+                print(f"PDF has {num_pages} pages")
                 for page_num, page in enumerate(pdf.pages, 1):
                     page_text = page.extract_text()
                     if page_text:
                         text += f"--- Page {page_num} ---\n{page_text}\n\n"
         except Exception as e:
-            print(f"❌ PDF processing error: {e}")
+            print(f"PDF processing error: {e}")
             return {"status": "error", "message": f"PDF processing failed: {str(e)}"}
     else:
-        print("📝 Processing text file...")
+        print("Processing text file...")
         try:
             text = content.decode("utf-8")
         except UnicodeDecodeError:
             text = content.decode("latin-1", errors="ignore")
 
     if not text.strip():
-        print("❌ ERROR: No text extracted from file!")
+        print("ERROR: No text extracted from file!")
         return {"status": "error", "message": "No text extracted from file"}
 
-    print(f"📊 Total text extracted: {len(text)} characters")
+    print(f"Total text extracted: {len(text)} characters")
     
     # Create document with session ID
     doc_id = str(uuid.uuid4())
@@ -242,7 +231,7 @@ async def upload_file(file: UploadFile = File(...)):
     
     # Store in session documents ONLY (not persistent storage)
     session_documents.append(ui_document)
-    print(f"📋 Added to session documents: {file.filename} (Session: {current_session_id})")
+    print(f"Added to session documents: {file.filename} (Session: {current_session_id})")
     
     # Also store in persistent storage for backup (optional)
     ui_documents.append(ui_document)
@@ -250,11 +239,11 @@ async def upload_file(file: UploadFile = File(...)):
     
     # Store in ChromaDB for chatbot
     if collection and text.strip():
-        print("🤖 Creating embeddings for chatbot...")
+        print("Creating embeddings for chatbot...")
         chunk_size = 1000
         chunks = [text[i:i+chunk_size] for i in range(0, len(text), chunk_size)]
         
-        print(f"✂️ Created {len(chunks)} chunks for embeddings")
+        print(f"Created {len(chunks)} chunks for embeddings")
         
         for idx, chunk in enumerate(chunks):
             try:
@@ -271,13 +260,13 @@ async def upload_file(file: UploadFile = File(...)):
                     }]
                 )
             except Exception as e:
-                print(f"  ⚠️ Error storing chunk {idx}: {e}")
+                print(f"Error storing chunk {idx}: {e}")
     
     end_time = time.time()
     processing_time = end_time - start_time
     
     print("=" * 60)
-    print("✅ UPLOAD COMPLETE")
+    print("UPLOAD COMPLETE")
     print("=" * 60)
     print(f"File: {file.filename}")
     print(f"Time: {processing_time:.2f}s")
@@ -285,7 +274,6 @@ async def upload_file(file: UploadFile = File(...)):
     print(f"Added to session: ✓ (Session ID: {current_session_id})")
     print(f"Added to ChromaDB: {len(chunks) if collection else 0} chunks")
     print("=" * 60 + "\n")
-    
     return {
         "status": "success",
         "filename": file.filename,
@@ -293,7 +281,7 @@ async def upload_file(file: UploadFile = File(...)):
         "session_id": current_session_id,
         "size": len(text),
         "processing_time": f"{processing_time:.2f}s",
-        "message": f"✅ {file.filename} uploaded successfully!\nDocument is now available for viewing and editing."
+        "message": f"{file.filename} uploaded successfully!\nDocument is now available for viewing and editing."
 }
 
 
@@ -304,20 +292,15 @@ async def upload_multiple_files(files: List[UploadFile] = File(...)):
     print(f"[{datetime.now().strftime('%H:%M:%S')}] 📥 MULTI-FILE UPLOAD STARTED")
     print(f"Session ID: {current_session_id}")
     print(f"Files received: {len(files)}")
-    
     if not files:
         return {"status": "error", "message": "No files selected"}
-    
     start_time = time.time()
     successful_uploads = []
     failed_uploads = []
-    
-    print("🔄 Starting parallel processing...")
-    
+    print("Starting parallel processing...")
     # Process files in parallel
     loop = asyncio.get_event_loop()
     tasks = []
-    
     for i, file in enumerate(files, 1):
         task = loop.run_in_executor(
             executor, 
@@ -325,16 +308,14 @@ async def upload_multiple_files(files: List[UploadFile] = File(...)):
             file, i, len(files)
         )
         tasks.append(task)
-    
-    # Wait for all tasks to complete
-    results = await asyncio.gather(*tasks, return_exceptions=True)
+    results = await asyncio.gather(*tasks, return_exceptions=True)    # Wait for all tasks to complete
     
     # Process results
     for i, result in enumerate(results):
         filename = files[i].filename if i < len(files) else f"File {i+1}"
         
         if isinstance(result, Exception):
-            print(f"❌ Failed: {filename} - {str(result)}")
+            print(f"Failed: {filename} - {str(result)}")
             failed_uploads.append({
                 "filename": filename,
                 "error": str(result)
@@ -345,17 +326,16 @@ async def upload_multiple_files(files: List[UploadFile] = File(...)):
             # Also add to persistent storage (optional)
             ui_documents.append(result)
             successful_uploads.append(result)
-            print(f"✅ Added to session: {result['filename']}")
+            print(f"Added to session: {result['filename']}")
     
     # Save all documents at once
     if successful_uploads:
         save_ui_documents()
-    
     end_time = time.time()
     total_time = end_time - start_time
     
     print("\n" + "=" * 60)
-    print("📊 UPLOAD SUMMARY")
+    print("UPLOAD SUMMARY")
     print("=" * 60)
     print(f"Total files: {len(files)}")
     print(f"Successful: {len(successful_uploads)}")
@@ -388,16 +368,14 @@ async def upload_multiple_files(files: List[UploadFile] = File(...)):
     }
     
     if successful_uploads:
-        response["message"] = f"✅ Successfully uploaded {len(successful_uploads)} file(s) to current session"
+        response["message"] = f"Successfully uploaded {len(successful_uploads)} file(s) to current session"
         if failed_uploads:
             response["message"] += f", {len(failed_uploads)} failed"
     else:
-        response["message"] = "❌ No files were uploaded successfully"
+        response["message"] = "No files were uploaded successfully"
     
     return response
 
-# Get specific UI document content
-# Get all UI documents (not chunks) - SESSION DOCUMENTS ONLY
 # Get all UI documents (not chunks) - SESSION DOCUMENTS ONLY
 @app.get("/ui-documents")
 async def get_ui_documents():
@@ -423,7 +401,6 @@ async def get_ui_documents():
             "session_id": doc.get("session_id", current_session_id),
             "preview": doc["content"][:100] + "..." if len(doc["content"]) > 100 else doc["content"]
         })
-    
     return {
         "status": "success",
         "count": len(documents_info),
@@ -441,7 +418,7 @@ async def get_ui_document(doc_id: str):
     # Search in session documents first
     for doc in session_documents:
         if doc["id"] == doc_id:
-            print(f"✅ Found in session: {doc['filename']}")
+            print(f"Found in session: {doc['filename']}")
             return {
                 "status": "success",
                 "document": {
@@ -456,10 +433,10 @@ async def get_ui_document(doc_id: str):
             }
     
     # If not found in session, check persistent storage
-    print(f"⚠️ Document ID {doc_id} not found in session documents")
+    print(f"Document ID {doc_id} not found in session documents")
     for doc in ui_documents:
         if doc["id"] == doc_id:
-            print(f"✅ Found in persistent storage: {doc['filename']}")
+            print(f"Found in persistent storage: {doc['filename']}")
             return {
                 "status": "success",
                 "document": {
@@ -473,12 +450,10 @@ async def get_ui_document(doc_id: str):
                 }
             }
     
-    print(f"❌ Document ID {doc_id} not found anywhere")
+    print(f"Document ID {doc_id} not found anywhere")
     return {"status": "error", "message": "Document not found"}
     
-# Update UI document content
-# Get specific UI document content
-# Update UI document content
+# Update UI document content    # Get specific UI document content  
 @app.put("/ui-documents/{doc_id}")
 async def update_ui_document(doc_id: str, update: DocumentUpdate):
     print(f"\n[{datetime.now().strftime('%H:%M:%S')}] ✏️ PUT /ui-documents/{doc_id}")
@@ -488,7 +463,7 @@ async def update_ui_document(doc_id: str, update: DocumentUpdate):
     doc_found = False
     for doc in session_documents:
         if doc["id"] == doc_id:
-            print(f"✅ Found in session: {doc['filename']}")
+            print(f"Found in session: {doc['filename']}")
             print(f"Old content length: {len(doc['content'])} chars")
             print(f"New content length: {len(update.content)} chars")
             
@@ -503,8 +478,8 @@ async def update_ui_document(doc_id: str, update: DocumentUpdate):
                     persistent_doc["content"] = update.content
                     persistent_doc["size"] = len(update.content)
             
-            # Save to file
-            save_ui_documents()
+            
+            save_ui_documents()    # Save to file
             
             # Update ChromaDB embeddings
             if collection:
@@ -513,16 +488,14 @@ async def update_ui_document(doc_id: str, update: DocumentUpdate):
                     results = collection.get(where={"doc_id": doc_id})
                     if results and results["ids"]:
                         collection.delete(ids=results["ids"])
-                        print(f"🗑️ Removed {len(results['ids'])} old embeddings")
+                        print(f"Removed {len(results['ids'])} old embeddings")
                 except Exception as e:
-                    print(f"⚠️ Error removing old embeddings: {e}")
+                    print(f"Error removing old embeddings: {e}")
                 
                 # Add new embeddings
                 chunk_size = 1000
                 chunks = [update.content[i:i+chunk_size] for i in range(0, len(update.content), chunk_size)]
-                
-                print(f"📝 Creating {len(chunks)} new chunks for updated document")
-                
+                print(f"Creating {len(chunks)} new chunks for updated document")
                 for idx, chunk in enumerate(chunks):
                     try:
                         chunk_id = f"{doc_id}_chunk_{idx}_updated"
@@ -540,22 +513,20 @@ async def update_ui_document(doc_id: str, update: DocumentUpdate):
                             }]
                         )
                     except Exception as e:
-                        print(f"⚠️ Error storing updated chunk {idx}: {e}")
+                        print(f"Error storing updated chunk {idx}: {e}")
             
-            print(f"✅ Document '{doc['filename']}' updated successfully")
+            print(f"Document '{doc['filename']}' updated successfully")
             return {"status": "success", "message": "Document updated successfully"}
     
     if not doc_found:
-        print(f"❌ Document ID {doc_id} not found in session documents")
+        print(f"Document ID {doc_id} not found in session documents")
         # Try to find in persistent storage
         for doc in ui_documents:
             if doc["id"] == doc_id:
-                print(f"⚠️ Found in persistent storage but not in session: {doc['filename']}")
+                print(f"Found in persistent storage but not in session: {doc['filename']}")
                 return {"status": "error", "message": "Document found but not in current session. Please re-upload it."}
-    
     return {"status": "error", "message": "Document not found"}
 
-# Delete UI document
 # Delete UI document
 @app.delete("/ui-documents/{doc_id}")
 async def delete_ui_document(doc_id: str):
@@ -565,46 +536,35 @@ async def delete_ui_document(doc_id: str):
     # Remove from session documents
     for i, doc in enumerate(session_documents):
         if doc["id"] == doc_id:
-            print(f"✅ Found in session: {doc['filename']}")
-            
-            # Remove from session documents
-            deleted_doc = session_documents.pop(i)
-            
+            print(f"Found in session: {doc['filename']}")
+            deleted_doc = session_documents.pop(i)    # Remove from session documents
             # Also remove from persistent storage
             for j, persistent_doc in enumerate(ui_documents):
                 if persistent_doc["id"] == doc_id:
                     ui_documents.pop(j)
                     break
-            
-            # Save changes to file
-            save_ui_documents()
-            
-            # Remove from ChromaDB
-            if collection:
+            save_ui_documents()    # Save changes to file
+            if collection:    # Remove from ChromaDB
                 try:
                     results = collection.get(where={"doc_id": doc_id})
                     if results and results["ids"]:
                         collection.delete(ids=results["ids"])
-                        print(f"🗑️ Removed {len(results['ids'])} embeddings from ChromaDB")
+                        print(f"Removed {len(results['ids'])} embeddings from ChromaDB")
                 except Exception as e:
-                    print(f"⚠️ Error removing embeddings: {e}")
-            
-            print(f"✅ Document '{deleted_doc['filename']}' deleted from session")
+                    print(f"Error removing embeddings: {e}")
+            print(f"Document '{deleted_doc['filename']}' deleted from session")
             print(f"Session documents count after deletion: {len(session_documents)}")
-            
             return {
                 "status": "success", 
                 "message": f"Document '{deleted_doc['filename']}' deleted successfully",
                 "session_documents_count": len(session_documents)
             }
-    
-    print(f"❌ Document ID {doc_id} not found in session")
+    print(f"Document ID {doc_id} not found in session")
     
     # Also check if it exists in persistent storage (for cleanup)
     for doc in ui_documents:
         if doc["id"] == doc_id:
-            print(f"⚠️ Document exists in persistent storage but not in session: {doc['filename']}")
-    
+            print(f"Document exists in persistent storage but not in session: {doc['filename']}")
     return {"status": "error", "message": "Document not found in current session"}
 
 # Enhanced Chat endpoint WITHOUT Ollama (simple RAG)
@@ -614,7 +574,7 @@ async def chat(req: ChatRequest):
     print(f"Query: '{req.query}'")
     
     if not collection or collection.count() == 0:
-        print("⚠️ No documents in ChromaDB for chat")
+        print("No documents in ChromaDB for chat")
         return {
             "answer": "I don't have any documents to search through. Please upload some documents first using the Upload Document section."
         }
@@ -629,29 +589,21 @@ async def chat(req: ChatRequest):
         print(f"Retrieved {len(results['documents'][0])} relevant chunks")
         print(results)
         if not results["documents"] or not results["documents"][0]:
-            print("⚠️ No relevant information found")
+            print("No relevant information found")
             return {
                 "answer": "I couldn't find specific information about that in the uploaded documents. "
                             "Try asking about something that might be in your documents, or upload more relevant files."
             }
-        
-        # Extract context from results
-        context_chunks = results["documents"][0]
-        
+        context_chunks = results["documents"][0]    # Extract context from results
         metadatas = results["metadatas"][0]
+        print(f"Found {len(context_chunks)} relevant sections")
         
-        print(f"📚 Found {len(context_chunks)} relevant sections")
-        
-        # Create a focused answer
-        if "procedure" in req.query.lower() or "step" in req.query.lower() or "how" in req.query.lower():
-            # For procedural questions
-            answer = f"Here's what I found about '{req.query}':\n\n"
-            
+        if "procedure" in req.query.lower() or "step" in req.query.lower() or "how" in req.query.lower():    # Create a focused answer
+            answer = f"Here's what I found about '{req.query}':\n\n"    # For procedural questions
             for i, (chunk, metadata) in enumerate(zip(context_chunks[:2], metadatas[:2]), 1):
                 source = metadata.get('source', 'a document')
                 answer += f"**From {source}:**\n"
-                # Extract procedural content
-                lines = chunk.split('\n')
+                lines = chunk.split('\n')    # Extract procedural content
                 for line in lines:
                     if any(keyword in line.lower() for keyword in ['step', 'procedure', 'method', 'how to', 'instructions']):
                         answer += f"- {line.strip()}\n"
@@ -661,7 +613,6 @@ async def chat(req: ChatRequest):
         else:
             # For general questions
             answer = "Based on the uploaded documents:\n\n"
-            
             for i, (chunk, metadata) in enumerate(zip(context_chunks[:2], metadatas[:2]), 1):
                 source = metadata.get('source', 'a document')
                 answer += f"**Information from {source}:**\n"
@@ -672,27 +623,23 @@ async def chat(req: ChatRequest):
                 query_lower = req.query.lower()
                 
                 for sentence in sentences:
-                    if len(sentence.split()) > 3:  # Avoid very short sentences
+                    if len(sentence.split()) > 3:    # Avoid very short sentences
                         if any(word in sentence.lower() for word in query_lower.split()):
                             relevant_sentences.append(sentence.strip() + '.')
-                        elif len(relevant_sentences) < 2:  # Take first few sentences
+                        elif len(relevant_sentences) < 2:    # Take first few sentences
                             relevant_sentences.append(sentence.strip() + '.')
-                
                 answer += " ".join(relevant_sentences[:3]) + "\n\n"
-        
         answer += "\n*This information comes from your uploaded documents. For more details, you can view the full documents in the See Documents section.*"
-        
-        print(f"🤖 Generated answer ({len(answer)} chars)")
+        print(f"Generated answer ({len(answer)} chars)")
         return {"answer": answer}
         
     except Exception as e:
-        print(f"❌ Chat error: {e}")
+        print(f"Chat error: {e}")
         return {
             "answer": "Sorry, I encountered an error while searching through the documents. "
                         "Please try again or rephrase your question."
         }
 
-# Health check
 # Health check
 @app.get("/health")
 async def health_check():
@@ -709,7 +656,7 @@ async def health_check():
     print(f"[{datetime.now().strftime('%H:%M:%S')}] 🩺 Health check")
     return status
 
-# Get current session info
+#Get current session info
 @app.get("/session-info")
 async def get_session_info():
     return {
@@ -732,7 +679,7 @@ async def clear_all_data():
         # Clear ChromaDB
         if collection:
             client.delete_collection(name="documents")
-            print("🗑️ Cleared all data")
+            print("Cleared all data")
         
         return {"status": "success", "message": "All data cleared"}
     except Exception as e:
@@ -757,4 +704,4 @@ async def debug_session():
     }
 
 # for running the app.py file
-# uvicorn app1:app --reload --port 8000
+# uvicorn backend:app --reload --port 8000
