@@ -19,7 +19,6 @@ from concurrent.futures import ThreadPoolExecutor  # ADDED FOR MULTI-UPLOAD
 # Request schema for chat
 class ChatRequest(BaseModel):
     query: str
-
 class DocumentUpdate(BaseModel):
     content: str
 
@@ -62,7 +61,7 @@ def load_ui_documents():
     except Exception as e:
         print(f"Error loading UI documents: {e}")
         ui_documents = []
-
+        
 def save_ui_documents():
     try:
         with open("ui_documents.json", "w") as f:
@@ -108,14 +107,12 @@ def home():
 def process_single_file(file: UploadFile, file_index: int, total_files: int):  # ADDED FOR MULTI-UPLOAD
     """Process a single file - can be called in parallel"""
     print(f"\n  [{file_index}/{total_files}] Processing: {file.filename}")
-    
     start_time = time.time()
     file_content = file.file.read()        # Read file content
     file.file.seek(0)  # Reset file pointer
     # Extract text
     is_pdf = file.filename.lower().endswith('.pdf')
     text = ""
-    
     if is_pdf:
         try:
             with pdfplumber.open(file.file) as pdf:
@@ -133,11 +130,9 @@ def process_single_file(file: UploadFile, file_index: int, total_files: int):  #
             text = file_content.decode("utf-8")
         except UnicodeDecodeError:
             text = file_content.decode("latin-1", errors="ignore")
-    
     if not text.strip():
         print(f"Warning: No text extracted from {file.filename}")
         return None
-    
     # Create document record
     doc_id = str(uuid.uuid4())
     ui_document = {
@@ -149,12 +144,11 @@ def process_single_file(file: UploadFile, file_index: int, total_files: int):  #
         "file_type": "pdf" if is_pdf else "text",
         "session_id": current_session_id 
     }
-    
     # Store in ChromaDB for chatbot
     if collection and text.strip():
         chunk_size = 1000
         chunks = [text[i:i+chunk_size] for i in range(0, len(text), chunk_size)]
-        print(f"    ✂️ Created {len(chunks)} chunks for embeddings")
+        print(f"Created {len(chunks)} chunks for embeddings")
         for idx, chunk in enumerate(chunks):
             try:
                 chunk_id = f"{doc_id}_chunk_{idx}"
@@ -182,11 +176,9 @@ async def upload_file(file: UploadFile = File(...)):
     print(f"[{datetime.now().strftime('%H:%M:%S')}] 📥 SINGLE FILE UPLOAD")
     print(f"File: {file.filename}")
     start_time = time.time()
-    
     # Read file content
     content = await file.read()
     is_pdf = file.filename.lower().endswith('.pdf')
-    
     # Extract text
     text = ""
     if is_pdf:
@@ -210,13 +202,10 @@ async def upload_file(file: UploadFile = File(...)):
             text = content.decode("utf-8")
         except UnicodeDecodeError:
             text = content.decode("latin-1", errors="ignore")
-
     if not text.strip():
         print("ERROR: No text extracted from file!")
         return {"status": "error", "message": "No text extracted from file"}
-
     print(f"Total text extracted: {len(text)} characters")
-    
     # Create document with session ID
     doc_id = str(uuid.uuid4())
     ui_document = {
@@ -228,23 +217,18 @@ async def upload_file(file: UploadFile = File(...)):
         "file_type": "pdf" if is_pdf else "text",
         "session_id": current_session_id  # ADD THIS
     }
-    
     # Store in session documents ONLY (not persistent storage)
     session_documents.append(ui_document)
     print(f"Added to session documents: {file.filename} (Session: {current_session_id})")
-    
     # Also store in persistent storage for backup (optional)
     ui_documents.append(ui_document)
     save_ui_documents()
-    
     # Store in ChromaDB for chatbot
     if collection and text.strip():
         print("Creating embeddings for chatbot...")
         chunk_size = 1000
         chunks = [text[i:i+chunk_size] for i in range(0, len(text), chunk_size)]
-        
         print(f"Created {len(chunks)} chunks for embeddings")
-        
         for idx, chunk in enumerate(chunks):
             try:
                 chunk_id = f"{doc_id}_chunk_{idx}"
@@ -261,7 +245,6 @@ async def upload_file(file: UploadFile = File(...)):
                 )
             except Exception as e:
                 print(f"Error storing chunk {idx}: {e}")
-    
     end_time = time.time()
     processing_time = end_time - start_time
     
@@ -283,7 +266,6 @@ async def upload_file(file: UploadFile = File(...)):
         "processing_time": f"{processing_time:.2f}s",
         "message": f"{file.filename} uploaded successfully!\nDocument is now available for viewing and editing."
 }
-
 
 @app.post("/upload-multiple")
 async def upload_multiple_files(files: List[UploadFile] = File(...)):
@@ -309,11 +291,9 @@ async def upload_multiple_files(files: List[UploadFile] = File(...)):
         )
         tasks.append(task)
     results = await asyncio.gather(*tasks, return_exceptions=True)    # Wait for all tasks to complete
-    
     # Process results
     for i, result in enumerate(results):
         filename = files[i].filename if i < len(files) else f"File {i+1}"
-        
         if isinstance(result, Exception):
             print(f"Failed: {filename} - {str(result)}")
             failed_uploads.append({
@@ -327,13 +307,11 @@ async def upload_multiple_files(files: List[UploadFile] = File(...)):
             ui_documents.append(result)
             successful_uploads.append(result)
             print(f"Added to session: {result['filename']}")
-    
     # Save all documents at once
     if successful_uploads:
         save_ui_documents()
     end_time = time.time()
     total_time = end_time - start_time
-    
     print("\n" + "=" * 60)
     print("UPLOAD SUMMARY")
     print("=" * 60)
@@ -345,7 +323,6 @@ async def upload_multiple_files(files: List[UploadFile] = File(...)):
     print(f"Session documents count: {len(session_documents)}")
     print(f"Total documents in ChromaDB: {collection.count() if collection else 0}")
     print("=" * 60)
-    
     # Prepare response
     response = {
         "status": "success" if successful_uploads else "partial" if failed_uploads else "error",
@@ -366,14 +343,12 @@ async def upload_multiple_files(files: List[UploadFile] = File(...)):
         ],
         "failed_files": failed_uploads
     }
-    
     if successful_uploads:
         response["message"] = f"Successfully uploaded {len(successful_uploads)} file(s) to current session"
         if failed_uploads:
             response["message"] += f", {len(failed_uploads)} failed"
     else:
         response["message"] = "No files were uploaded successfully"
-    
     return response
 
 # Get all UI documents (not chunks) - SESSION DOCUMENTS ONLY
@@ -383,13 +358,11 @@ async def get_ui_documents():
     print(f"Session ID: {current_session_id}")
     print(f"Session documents count: {len(session_documents)}")
     print(f"All documents in storage: {len(ui_documents)}")
-    
     # Debug: Show all session document filenames
     if session_documents:
         print("Session documents:")
         for i, doc in enumerate(session_documents):
             print(f"  {i+1}. {doc['filename']} (ID: {doc['id'][:8]})")
-    
     # Return ONLY session documents
     documents_info = []
     for doc in session_documents:
@@ -408,13 +381,12 @@ async def get_ui_documents():
         "total_in_chromadb": collection.count() if collection else 0,
         "documents": documents_info
     }
-    
+
 # Get specific UI document content - ADD THIS ENDPOINT
 @app.get("/ui-documents/{doc_id}")
 async def get_ui_document(doc_id: str):
     print(f"\n[{datetime.now().strftime('%H:%M:%S')}] 📖 GET /ui-documents/{doc_id}")
     print(f"Looking for document ID: {doc_id}")
-    
     # Search in session documents first
     for doc in session_documents:
         if doc["id"] == doc_id:
@@ -431,7 +403,6 @@ async def get_ui_document(doc_id: str):
                     "session_id": doc.get("session_id", current_session_id)
                 }
             }
-    
     # If not found in session, check persistent storage
     print(f"Document ID {doc_id} not found in session documents")
     for doc in ui_documents:
@@ -449,7 +420,6 @@ async def get_ui_document(doc_id: str):
                     "session_id": doc.get("session_id", current_session_id)
                 }
             }
-    
     print(f"Document ID {doc_id} not found anywhere")
     return {"status": "error", "message": "Document not found"}
     
@@ -458,7 +428,6 @@ async def get_ui_document(doc_id: str):
 async def update_ui_document(doc_id: str, update: DocumentUpdate):
     print(f"\n[{datetime.now().strftime('%H:%M:%S')}] ✏️ PUT /ui-documents/{doc_id}")
     print(f"Looking for document ID: {doc_id}")
-    
     # Search in session documents
     doc_found = False
     for doc in session_documents:
@@ -466,21 +435,16 @@ async def update_ui_document(doc_id: str, update: DocumentUpdate):
             print(f"Found in session: {doc['filename']}")
             print(f"Old content length: {len(doc['content'])} chars")
             print(f"New content length: {len(update.content)} chars")
-            
             # Update session document
             doc["content"] = update.content
             doc["size"] = len(update.content)
             doc_found = True
-            
             # Also update in persistent storage
             for persistent_doc in ui_documents:
                 if persistent_doc["id"] == doc_id:
                     persistent_doc["content"] = update.content
                     persistent_doc["size"] = len(update.content)
-            
-            
             save_ui_documents()    # Save to file
-            
             # Update ChromaDB embeddings
             if collection:
                 # Remove old embeddings
@@ -491,7 +455,6 @@ async def update_ui_document(doc_id: str, update: DocumentUpdate):
                         print(f"Removed {len(results['ids'])} old embeddings")
                 except Exception as e:
                     print(f"Error removing old embeddings: {e}")
-                
                 # Add new embeddings
                 chunk_size = 1000
                 chunks = [update.content[i:i+chunk_size] for i in range(0, len(update.content), chunk_size)]
@@ -514,10 +477,8 @@ async def update_ui_document(doc_id: str, update: DocumentUpdate):
                         )
                     except Exception as e:
                         print(f"Error storing updated chunk {idx}: {e}")
-            
             print(f"Document '{doc['filename']}' updated successfully")
             return {"status": "success", "message": "Document updated successfully"}
-    
     if not doc_found:
         print(f"Document ID {doc_id} not found in session documents")
         # Try to find in persistent storage
@@ -532,7 +493,6 @@ async def update_ui_document(doc_id: str, update: DocumentUpdate):
 async def delete_ui_document(doc_id: str):
     print(f"\n[{datetime.now().strftime('%H:%M:%S')}] 🗑️ DELETE /ui-documents/{doc_id}")
     print(f"Looking for document ID: {doc_id} in session")
-    
     # Remove from session documents
     for i, doc in enumerate(session_documents):
         if doc["id"] == doc_id:
@@ -560,7 +520,6 @@ async def delete_ui_document(doc_id: str):
                 "session_documents_count": len(session_documents)
             }
     print(f"Document ID {doc_id} not found in session")
-    
     # Also check if it exists in persistent storage (for cleanup)
     for doc in ui_documents:
         if doc["id"] == doc_id:
@@ -578,7 +537,6 @@ async def chat(req: ChatRequest):
         return {
             "answer": "I don't have any documents to search through. Please upload some documents first using the Upload Document section."
         }
-    
     try:
         # Get relevant document chunks
         results = collection.query(
@@ -597,7 +555,6 @@ async def chat(req: ChatRequest):
         context_chunks = results["documents"][0]    # Extract context from results
         metadatas = results["metadatas"][0]
         print(f"Found {len(context_chunks)} relevant sections")
-        
         if "procedure" in req.query.lower() or "step" in req.query.lower() or "how" in req.query.lower():    # Create a focused answer
             answer = f"Here's what I found about '{req.query}':\n\n"    # For procedural questions
             for i, (chunk, metadata) in enumerate(zip(context_chunks[:2], metadatas[:2]), 1):
@@ -609,19 +566,16 @@ async def chat(req: ChatRequest):
                         answer += f"- {line.strip()}\n"
                 if i < len(context_chunks[:2]):
                     answer += "\n"
-        
         else:
             # For general questions
             answer = "Based on the uploaded documents:\n\n"
             for i, (chunk, metadata) in enumerate(zip(context_chunks[:2], metadatas[:2]), 1):
                 source = metadata.get('source', 'a document')
                 answer += f"**Information from {source}:**\n"
-                
                 # Take the most relevant part of the chunk
                 sentences = chunk.split('. ')
                 relevant_sentences = []
                 query_lower = req.query.lower()
-                
                 for sentence in sentences:
                     if len(sentence.split()) > 3:    # Avoid very short sentences
                         if any(word in sentence.lower() for word in query_lower.split()):
@@ -632,7 +586,6 @@ async def chat(req: ChatRequest):
         answer += "\n*This information comes from your uploaded documents. For more details, you can view the full documents in the See Documents section.*"
         print(f"Generated answer ({len(answer)} chars)")
         return {"answer": answer}
-        
     except Exception as e:
         print(f"Chat error: {e}")
         return {
@@ -675,12 +628,10 @@ async def clear_all_data():
         # Clear UI documents
         ui_documents = []
         save_ui_documents()
-        
         # Clear ChromaDB
         if collection:
             client.delete_collection(name="documents")
             print("Cleared all data")
-        
         return {"status": "success", "message": "All data cleared"}
     except Exception as e:
         return {"status": "error", "message": str(e)}
@@ -702,6 +653,6 @@ async def debug_session():
         "all_documents_count": len(ui_documents),
         "chromadb_count": collection.count() if collection else 0
     }
-
+    
 # for running the app.py file
 # uvicorn backend:app --reload --port 8000
