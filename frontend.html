@@ -23,7 +23,6 @@
             left: 0;
             top: 0;
         }
-
         .sidebar h2 {
             font-size: 24px;
             margin-top: 0;
@@ -33,7 +32,6 @@
             padding-bottom: 15px;
             border-bottom: 2px solid #34495e;
         }
-
         .sidebar button {
             display: block;
             width: 100%;
@@ -49,7 +47,6 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-
         .sidebar button:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 12px rgba(0,0,0,0.15);
@@ -63,7 +60,6 @@
             margin-left: 250px;
             min-height: 100vh;
         }
-
         .section {
             background: white;
             border-radius: 12px;
@@ -72,17 +68,14 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
             display: none;
         }
-
         .section.active {
             display: block;
             animation: fadeIn 0.5s ease;
         }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         h3 {
             color: #2c3e50;
             margin-top: 0;
@@ -101,14 +94,12 @@
             background: #f8fafc;
             margin-bottom: 20px;
         }
-
         .upload-box input[type="file"] {
             margin: 15px 0;
             padding: 10px;
             width: 100%;
             max-width: 400px;
         }
-
         .upload-btn {
             background: linear-gradient(135deg, #27ae60, #219653);
             color: white;
@@ -121,19 +112,16 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(39, 174, 96, 0.2);
         }
-
         .upload-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 12px rgba(39, 174, 96, 0.3);
         }
-
         .upload-btn:disabled {
             background: #95a5a6;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
         }
-
         #uploadStatus {
             margin-top: 15px;
             padding: 12px;
@@ -151,38 +139,32 @@
             transition: all 0.3s ease;
             box-shadow: 0 3px 10px rgba(0,0,0,0.05);
         }
-
         .document-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
             border-color: #3498db;
         }
-
         .document-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
         }
-
         .document-title {
             font-size: 18px;
             font-weight: 600;
             color: #2c3e50;
         }
-
         .document-meta {
             font-size: 13px;
             color: #7f8c8d;
             margin: 5px 0;
         }
-
         .document-actions {
             display: flex;
             gap: 10px;
             margin-top: 15px;
         }
-
         .action-btn {
             padding: 8px 15px;
             border: none;
@@ -192,22 +174,18 @@
             transition: all 0.2s ease;
             font-size: 14px;
         }
-
         .view-btn {
             background: #3498db;
             color: white;
         }
-
         .edit-btn {
             background: #f39c12;
             color: white;
         }
-
         .delete-btn {
             background: #e74c3c;
             color: white;
         }
-
         .action-btn:hover {
             opacity: 0.9;
             transform: scale(1.05);
@@ -222,14 +200,12 @@
             overflow: hidden;
             box-shadow: 0 5px 25px rgba(0,0,0,0.1);
         }
-
         .chat-header {
             background: linear-gradient(135deg, #1abc9c, #16a085);
             color: white;
             padding: 20px;
             text-align: center;
         }
-
         #chatWindow {
             height: 400px;
             padding: 20px;
@@ -237,7 +213,6 @@
             background: #fafafa;
             border-bottom: 1px solid #eee;
         }
-
         .message {
             margin-bottom: 15px;
             padding: 12px 15px;
@@ -246,19 +221,16 @@
             word-wrap: break-word;
             animation: messageAppear 0.3s ease;
         }
-
         @keyframes messageAppear {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         .user-message {
             background: linear-gradient(135deg, #3498db, #2980b9);
             color: white;
             margin-left: auto;
             border-bottom-right-radius: 4px;
         }
-
         .bot-message {
             background: white;
             color: #333;
@@ -266,19 +238,16 @@
             border: 1px solid #e0e6ed;
             border-bottom-left-radius: 4px;
         }
-
         .thinking {
             opacity: 0.7;
             font-style: italic;
         }
-
         .chat-input-container {
             display: flex;
             padding: 15px;
             background: white;
             border-top: 1px solid #eee;
         }
-
         #chatInput {
             flex: 1;
             padding: 12px 15px;
@@ -287,12 +256,10 @@
             font-size: 16px;
             transition: border 0.3s ease;
         }
-
         #chatInput:focus {
             outline: none;
             border-color: #1abc9c;
         }
-
         .send-btn {
             background: linear-gradient(135deg, #1abc9c, #16a085);
             color: white;
@@ -304,7 +271,6 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-
         .send-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(26, 188, 156, 0.3);
@@ -322,7 +288,6 @@
             z-index: 1000;
             animation: fadeIn 0.3s ease;
         }
-
         .modal-content {
             display: none;
             position: fixed;
@@ -340,12 +305,10 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             animation: modalAppear 0.4s ease;
         }
-
         @keyframes modalAppear {
             from { opacity: 0; transform: translate(-50%, -45%); }
             to { opacity: 1; transform: translate(-50%, -50%); }
         }
-
         .modal-header {
             background: linear-gradient(135deg, #2c3e50, #1a2530);
             color: white;
@@ -354,12 +317,10 @@
             justify-content: space-between;
             align-items: center;
         }
-
         .modal-header h4 {
             margin: 0;
             font-size: 20px;
         }
-
         .close-btn {
             background: none;
             border: none;
@@ -375,17 +336,14 @@
             justify-content: center;
             transition: background 0.3s ease;
         }
-
         .close-btn:hover {
             background: rgba(255,255,255,0.1);
         }
-
         .modal-body {
             padding: 12px;
             max-height: 60vh;
             overflow-y: auto;
         }
-
         #viewContent, #editContent {
             font-family: 'Courier New', monospace;
             line-height: 1.6;
@@ -397,7 +355,6 @@
             min-height: 300px;
             font-size: 14px;
         }
-
         #editContent {
             width: 100%;
             min-height: 400px;
@@ -409,7 +366,6 @@
             font-size: 14px;
             line-height: 1.5;
         }
-
         .modal-actions {
             padding: 12px;
             background: #f8f9fa;
@@ -418,7 +374,6 @@
             justify-content: flex-end;
             gap: 26px;
         }
-
         .save-btn {
             background: linear-gradient(135deg, #27ae60, #219653);
             color: white;
@@ -428,7 +383,6 @@
             font-weight: bold;
             cursor: pointer;
         }
-
         .cancel-btn {
             background: #95a5a6;
             color: white;
@@ -449,7 +403,6 @@
             border-top-color: white;
             animation: spin 1s linear infinite;
         }
-
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
@@ -467,10 +420,8 @@
             <p>Chatbot Ready</p>
         </div>
     </div>
-
     <!-- Main Content -->
     <div class="main">
-        <!-- Upload Section -->
         <!-- Upload Section -->
         <div id="upload" class="section active">
             <h3>📤 Upload Documents</h3>
@@ -504,7 +455,7 @@
                     <h4 style="color: #2c3e50; margin-bottom: 10px;">Selected Files:</h4>
                     <div id="fileList" style="max-height: 200px; overflow-y: auto; background: #f8f9fa; 
                                             border-radius: 8px; padding: 10px; border: 1px solid #e9ecef;">
-                        <!-- Files will be listed here -->
+                    <!-- Files will be listed here -->
                     </div>
                     <div style="margin-top: 10px; font-size: 14px; color: #6c757d;">
                         Total: <span id="fileCount">0</span> files | 
@@ -630,7 +581,7 @@
             const uploadStatus = document.getElementById('uploadStatus');
             
             if (!fileInput.files.length) {
-                uploadStatus.innerHTML = '<div style="color: #e74c3c;">⚠️ Please select a file first</div>';
+                uploadStatus.innerHTML = '<div style="color: #e74c3c;">Please select a file first</div>';
                 return;
             }
             const file = fileInput.files[0];
@@ -667,7 +618,6 @@
                             </div>
                         </div>
                     `;
-
                     fileInput.value = '';   // Clear file input
                     loadDocuments();    // Load updated documents
                 } else {
@@ -714,10 +664,8 @@
                 fileCount.textContent = selectedFiles.length;
                 let totalBytes = 0;     // Calculate total size
                 fileList.innerHTML = '';
-                
                 selectedFiles.forEach((file, index) => {
                     totalBytes += file.size;
-                    
                     const fileItem = document.createElement('div');
                     fileItem.style.cssText = `
                         display: flex; 
@@ -729,7 +677,6 @@
                         border-radius: 6px; 
                         border: 1px solid #dee2e6;
                     `;
-                    
                     fileItem.innerHTML = `
                         <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
                             <span style="font-size: 16px;">
@@ -748,7 +695,6 @@
                             ×
                         </button>
                     `;
-                    
                     fileList.appendChild(fileItem);
                 });
                 
@@ -761,11 +707,9 @@
         // Remove file from selection
         function removeFile(index) {
             selectedFiles.splice(index, 1);
-            
             const dataTransfer = new DataTransfer();    // Update file input
             selectedFiles.forEach(file => dataTransfer.items.add(file));
             document.getElementById('fileInput').files = dataTransfer.files;
-            
             displaySelectedFiles();
         }
 
@@ -774,12 +718,10 @@
                 showUploadStatus(' Please select files first', 'warning');
                 return;
             }
-            
             if (uploadInProgress) {
                 showUploadStatus(' Upload already in progress', 'warning');
                 return;
             }
-            
             const uploadBtn = document.getElementById('uploadBtn');
             const uploadProgress = document.getElementById('uploadProgress');
             const progressBar = document.getElementById('progressBar');
@@ -790,7 +732,7 @@
             uploadInProgress = true;
             uploadBtn.disabled = true;
             uploadBtn.innerHTML = '<span class="spinner"></span> Uploading...';
-            
+    
             // Show progress
             uploadProgress.style.display = 'block';
             progressBar.style.width = '0%';
@@ -806,7 +748,6 @@
                     </div>
                 </div>
             `, 'info');
-            
             try {
                 const formData = new FormData();
                 selectedFiles.forEach((file, index) => {    // Add all files to FormData
@@ -816,15 +757,13 @@
                     method: 'POST',
                     body: formData
                 });
-                
                 const result = await response.json();
                 progressBar.style.width = '100%';   // Update progress
                 progressText.textContent = `${result.successful}/${selectedFiles.length}`;
                 currentFile.textContent = 'Complete!';
-                
                 if (result.status === 'success' || result.status === 'partial') {
                     // Show success summary
-                    let successHTML = `
+                    let successHTML = `    
                         <div style="background: #d4edda; padding: 20px; border-radius: 8px; border-left: 4px solid #28a745;">
                             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
                                 <span style="font-size: 24px;">✅</span>
@@ -957,7 +896,6 @@
                     `;
                     documentList.appendChild(card);
                 });
-                
                 // Show session info
                 const sessionInfo = document.createElement('div');
                 sessionInfo.style.cssText = `
@@ -974,7 +912,6 @@
                     <div>Documents in session: ${result.count} | Total in database: ${result.total_in_chromadb || 0}</div>
                 `;
                 documentList.appendChild(sessionInfo);
-                
             } else {
                 documentList.innerHTML = `
                     <div style="text-align: center; padding: 40px; color: #7f8c8d;">
@@ -1031,21 +968,16 @@
             currentDocumentId = null;
             currentDocumentName = null;
         }
-
         // Edit document
         async function editDocument(docId, docName) {
             currentDocumentId = docId;
             currentDocumentName = docName;
-            
             document.getElementById('editModalTitle').textContent = `Editing: ${docName}`;
-            
             try {
                 const response = await fetch(`http://localhost:8000/ui-documents/${docId}`);
                 const result = await response.json();
-                
                 if (result.status === 'success') {
                     document.getElementById('editContent').value = result.document.content;
-                    
                     // Show modal
                     document.getElementById('editModalOverlay').style.display = 'block';
                     document.getElementById('editModal').style.display = 'block';
@@ -1073,18 +1005,14 @@
             currentDocumentId = null;
             currentDocumentName = null;
         }
-
         // Save edited document
         async function saveDocument() {
             if (!currentDocumentId) return;
-            
             const newContent = document.getElementById('editContent').value;
             const saveBtn = document.querySelector('#editModal .save-btn');
-
             // Disable save button
             saveBtn.disabled = true;
             saveBtn.innerHTML = '<span class="spinner" style="border-top-color: white; width: 16px; height: 16px; margin-right: 5px;"></span> Saving...';
-
             try {
                 const response = await fetch(`http://localhost:8000/ui-documents/${currentDocumentId}`, {
                     method: 'PUT',
@@ -1092,29 +1020,21 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({ content: newContent })
-                });
-                
+                }); 
                 const result = await response.json();
-                
                 if (result.status === 'success') {
-                    // Close modal
-                    closeEditModal();
-                    
-                    // Reload documents
-                    loadDocuments();
-                    
+                    closeEditModal();     // Close modal
+                    loadDocuments();    // Reload documents
                     // Show success message
                     showToast('✅ Document saved successfully!', 'success');
                 } else {
                     alert('Error saving document: ' + result.message);
-                    // RE-ENABLE THE BUTTON ON ERROR
-                    resetSaveButton(saveBtn);
+                    resetSaveButton(saveBtn);    // RE-ENABLE THE BUTTON ON ERROR
                 }
             } catch (error) {
                 alert('Error saving document');
                 console.error('Save document error:', error);
-                // RE-ENABLE THE BUTTON ON ERROR
-                resetSaveButton(saveBtn);
+                resetSaveButton(saveBtn);    // RE-ENABLE THE BUTTON ON ERROR
             }
         }
 
@@ -1125,20 +1045,16 @@
                 saveBtn.innerHTML = 'Save Changes';
             }
         }
-
         // Delete document
         async function deleteDocument(docId, docName) {
             if (!confirm(`Are you sure you want to delete "${docName}" from current session?\nThis will also remove it from chatbot memory.`)) {
                 return;
             }
-            
             try {
                 const response = await fetch(`http://localhost:8000/ui-documents/${docId}`, {
                     method: 'DELETE'
                 });
-                
                 const result = await response.json();
-                
                 if (result.status === 'success') {
                     // Remove the document card from UI immediately
                     const card = document.querySelector(`[data-doc-id="${docId}"]`);
@@ -1147,11 +1063,9 @@
                         card.style.transition = 'opacity 0.3s';
                         setTimeout(() => {
                             card.remove();
-                            
                             // Update document count
                             const remainingCards = document.querySelectorAll('.document-card').length;
                             document.getElementById('docCount').textContent = remainingCards;
-                            
                             // If no cards left, show empty message
                             if (remainingCards === 0) {
                                 document.getElementById('documentList').innerHTML = `
@@ -1164,20 +1078,17 @@
                             }
                         }, 300);
                     }
-                    
-                    showToast(`✅ Document "${docName}" deleted successfully!`, 'success');
-                    
+                    showToast(`Document "${docName}" deleted successfully!`, 'success');
                     // Also trigger a full reload after a delay
                     setTimeout(() => {
                         loadDocuments();
                     }, 1000);
-                    
                 } else {
-                    showToast(`❌ Error: ${result.message}`, 'error');
+                    showToast(`Error: ${result.message}`, 'error');
                 }
             } catch (error) {
                 console.error('Delete document error:', error);
-                showToast('❌ Error deleting document. Please try again.', 'error');
+                showToast('Error deleting document. Please try again.', 'error');
             }
         }
 
@@ -1185,30 +1096,21 @@
         async function sendMessage() {
             const input = document.getElementById('chatInput');
             const message = input.value.trim();
-            
             if (!message) return;
-            
             const chatWindow = document.getElementById('chatWindow');
-            
             // Add user message
             const userMsg = document.createElement('div');
             userMsg.className = 'message user-message';
             userMsg.textContent = message;
             chatWindow.appendChild(userMsg);
-            
-            // Clear input
-            input.value = '';
-            
+            input.value = '';    // Clear input
             // Add thinking indicator
             const thinkingMsg = document.createElement('div');
             thinkingMsg.className = 'message bot-message thinking';
             thinkingMsg.textContent = 'Thinking...';
             thinkingMsg.id = 'thinkingMsg';
             chatWindow.appendChild(thinkingMsg);
-            
-            // Scroll to bottom
-            chatWindow.scrollTop = chatWindow.scrollHeight;
-            
+            chatWindow.scrollTop = chatWindow.scrollHeight;    // Scroll to bottom
             try {
                 const response = await fetch('http://localhost:8000/chat', {
                     method: 'POST',
@@ -1217,35 +1119,23 @@
                     },
                     body: JSON.stringify({ query: message })
                 });
-                
                 const result = await response.json();
-                
-                // Remove thinking message
-                thinkingMsg.remove();
-                
+                thinkingMsg.remove();    // Remove thinking message
                 // Add bot response
                 const botMsg = document.createElement('div');
                 botMsg.className = 'message bot-message';
-                
                 // Format the answer with line breaks
                 const formattedAnswer = result.answer.replace(/\n/g, '<br>');
                 botMsg.innerHTML = formattedAnswer;
-                
                 chatWindow.appendChild(botMsg);
-                
-                // Scroll to bottom
-                chatWindow.scrollTop = chatWindow.scrollHeight;
-                
+                chatWindow.scrollTop = chatWindow.scrollHeight;    // Scroll to bottom
             } catch (error) {
-                // Remove thinking message
-                thinkingMsg.remove();
-                
+                thinkingMsg.remove();    // Remove thinking message
                 // Add error message
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'message bot-message';
                 errorMsg.textContent = 'Sorry, I encountered an error. Please try again.';
                 chatWindow.appendChild(errorMsg);
-                
                 console.error('Chat error:', error);
             }
         }
@@ -1255,7 +1145,6 @@
             // Remove existing toasts
             const existingToasts = document.querySelectorAll('.toast-notification');
             existingToasts.forEach(toast => toast.remove());
-            
             const toast = document.createElement('div');
             toast.className = `toast-notification ${type}`;
             toast.style.cssText = `
@@ -1270,7 +1159,6 @@
                 animation: slideIn 0.3s ease;
                 box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             `;
-            
             if (type === 'success') {
                 toast.style.background = 'linear-gradient(135deg, #27ae60, #219653)';
             } else if (type === 'error') {
@@ -1278,10 +1166,8 @@
             } else {
                 toast.style.background = 'linear-gradient(135deg, #3498db, #2980b9)';
             }
-            
             toast.textContent = message;
             document.body.appendChild(toast);
-            
             // Auto remove after 3 seconds
             setTimeout(() => {
                 toast.style.animation = 'slideOut 0.3s ease';
@@ -1292,7 +1178,6 @@
                 }, 300);
             }, 3000);
         }
-
         // Add CSS animations
         if (!document.querySelector('#toast-styles')) {
             const style = document.createElement('style');
@@ -1309,19 +1194,16 @@
             `;
             document.head.appendChild(style);
         }
-
         // Enter key support for chat
         document.getElementById('chatInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 sendMessage();
             }
         });
-
         // Load documents on page load
         window.onload = function() {
             loadDocuments();
-            // Set focus to chat input if in chatbot section
-            document.getElementById('chatInput').focus();
+            document.getElementById('chatInput').focus();    // Set focus to chat input if in chatbot section
         };
     </script>
 </body>
