@@ -18,9 +18,10 @@ Upload `.txt` or `.pdf` files, and chat with an AI assistant that retrieves cont
 
 ---
 ## 🚀 Usage
-  1. Start the backend
+  1. Create a **templates folder** and paster the `html file` and create a **static folder** and paste your `css` and `js file`
+  2. Start the backend
+     Start the backend
        `uvicorn app1:app --reload --port 8000`
-
      This launches the server.
    
   3. Open the UI
@@ -30,6 +31,23 @@ Upload `.txt` or `.pdf` files, and chat with an AI assistant that retrieves cont
        `Upload .txt or .pdf files.`
      
        `Start chatting with the RAG assistant`.
+---
+
+## 📊 Example Workflow
+  1. Upload a PDF research paper.
+
+  2. Backend chunks + embeds content into ChromaDB.
+
+  3. Chatbot retrieves relevant passages and generates context‑aware answers.
+
+---
+## 🧭 Future Enchancements are welcomed
+
+  1. Add support for multiple formats documents
+  2. Enhance UI with chat history
+  3. Dockerize for deployment
+  4. Multi‑user authentication
+---
 
 ## 📦 Installation
 Clone the repo and install dependencies:
