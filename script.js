@@ -1,24 +1,20 @@
 const API_BASE = window.location.origin; // Use same origin as served page
 let currentDocumentId = null;
 let currentDocumentName = null;
-
         // Show section
         function showSection(sectionId) {
             // Hide all sections
             document.querySelectorAll('.section').forEach(section => {
                 section.classList.remove('active');
             });
-            
             document.getElementById(sectionId).classList.add('active'); // Show selected section
             document.getElementById('uploadStatus').innerHTML = ''; // Clear upload status when leaving upload section or when switching to any section
-            
             if (sectionId !== 'upload') {   // Clear selected files when leaving upload section
                 selectedFiles = [];
                 document.getElementById('fileInput').value = '';
                 document.getElementById('selectedFiles').style.display = 'none';
                 document.getElementById('uploadProgress').style.display = 'none';
             }
-
             if (sectionId === 'documents') {    // Load documents if showing documents section
                 loadDocuments();
             }
@@ -26,13 +22,11 @@ let currentDocumentName = null;
                 document.getElementById('chatInput').focus();
             }
         }
-
         // Upload file
         async function uploadFile() {
             const fileInput = document.getElementById('fileInput');
             const uploadBtn = document.getElementById('uploadBtn');
             const uploadStatus = document.getElementById('uploadStatus');
-            
             if (!fileInput.files.length) {
                 uploadStatus.innerHTML = '<div style="color: #e74c3c;">⚠️ Please select a file first</div>';
                 return;
@@ -50,7 +44,6 @@ let currentDocumentName = null;
                     </div>
                 </div>
             `;
-
             try {
                 const response = await fetch(`${API_BASE}/upload`, {
                     method: 'POST',
@@ -71,13 +64,12 @@ let currentDocumentName = null;
                             </div>
                         </div>
                     `;
-
                     fileInput.value = '';   // Clear file input
                     loadDocuments();    // Load updated documents
                 } else {
                     uploadStatus.innerHTML = `
                         <div style="background: #f8d7da; padding: 15px; border-radius: 8px; border-left: 4px solid #dc3545;">
-                            <strong style="color: #721c24;">❌ Upload Failed</strong>
+                            <strong style="color: #721c24;">Upload Failed</strong>
                             <div style="margin-top: 5px; color: #856404;">
                                 ${result.message || 'Unknown error'}
                             </div>
@@ -87,7 +79,7 @@ let currentDocumentName = null;
             } catch (error) {
                 uploadStatus.innerHTML = `
                     <div style="background: #f8d7da; padding: 15px; border-radius: 8px; border-left: 4px solid #dc3545;">
-                        <strong style="color: #721c24;">❌ Connection Error</strong>
+                        <strong style="color: #721c24;">Connection Error</strong>
                         <div style="margin-top: 5px; color: #856404;">
                             Make sure the backend server is running at http://localhost:8000
                         </div>
@@ -105,7 +97,6 @@ let currentDocumentName = null;
             selectedFiles = Array.from(e.target.files);
             displaySelectedFiles();
         });
-
         // Display selected files
         function displaySelectedFiles() {
             const fileList = document.getElementById('fileList');
@@ -133,7 +124,6 @@ let currentDocumentName = null;
                         border-radius: 6px; 
                         border: 1px solid #dee2e6;
                     `;
-                    
                     fileItem.innerHTML = `
                         <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
                             <span style="font-size: 16px;">
@@ -189,18 +179,15 @@ let currentDocumentName = null;
             const progressBar = document.getElementById('progressBar');
             const progressText = document.getElementById('progressText');
             const currentFile = document.getElementById('currentFile');
-            
             // Disable upload button
             uploadInProgress = true;
             uploadBtn.disabled = true;
             uploadBtn.innerHTML = '<span class="spinner"></span> Uploading...';
-            
             // Show progress
             uploadProgress.style.display = 'block';
             progressBar.style.width = '0%';
             progressText.textContent = `0/${selectedFiles.length}`;
             currentFile.textContent = 'Preparing upload...';
-            
             // Show initial status
             showUploadStatus(`
                 <div style="background: #fff8e1; padding: 15px; border-radius: 8px; border-left: 4px solid #f39c12;">
@@ -210,7 +197,6 @@ let currentDocumentName = null;
                     </div>
                 </div>
             `, 'info');
-            
             try {
                 const formData = new FormData();
                 selectedFiles.forEach((file, index) => {    // Add all files to FormData
@@ -220,12 +206,10 @@ let currentDocumentName = null;
                     method: 'POST',
                     body: formData
                 });
-                
                 const result = await response.json();
                 progressBar.style.width = '100%';   // Update progress
                 progressText.textContent = `${result.successful}/${selectedFiles.length}`;
                 currentFile.textContent = 'Complete!';
-                
                 if (result.status === 'success' || result.status === 'partial') {
                     // Show success summary
                     let successHTML = `
@@ -240,7 +224,6 @@ let currentDocumentName = null;
                                 </div>
                             </div>
                     `;
-                    
                     if (result.successful > 0) {
                         successHTML += `
                             <div style="margin-top: 15px;">
@@ -280,7 +263,6 @@ let currentDocumentName = null;
                     document.getElementById('fileInput').value = '';
                     document.getElementById('selectedFiles').style.display = 'none';
                     loadDocuments();    // Load updated documents
-                    
                 } else {
                     showUploadStatus(`
                         <div style="background: #f8d7da; padding: 15px; border-radius: 8px; border-left: 4px solid #dc3545;">
@@ -378,7 +360,6 @@ let currentDocumentName = null;
                     <div>Documents in session: ${result.count} | Total in database: ${result.total_in_chromadb || 0}</div>
                 `;
                 documentList.appendChild(sessionInfo);
-                
             } else {
                 documentList.innerHTML = `
                     <div style="text-align: center; padding: 40px; color: #7f8c8d;">
@@ -438,9 +419,7 @@ let currentDocumentName = null;
         async function editDocument(docId, docName) {
             currentDocumentId = docId;
             currentDocumentName = docName;
-            
             document.getElementById('editModalTitle').textContent = `Editing: ${docName}`;
-            
             try {
                 const response = await fetch(`${API_BASE}/ui-documents/${docId}`);
                 const result = await response.json();
@@ -547,14 +526,11 @@ let currentDocumentName = null;
                             } 
                         }, 300);
                     }
-
                     showToast(` Document "${docName}" deleted successfully!`, 'success');
-
                     // Also trigger a full reload after a delay
                     setTimeout(() => {
                         loadDocuments();
                     }, 1000);
-                    
                 } else {
                     showToast(` Error: ${result.message}`, 'error');
                 }
@@ -650,7 +626,6 @@ let currentDocumentName = null;
                 }, 300);
             }, 3000);
         }
-
         // Add CSS animations
         if (!document.querySelector('#toast-styles')) {
             const style = document.createElement('style');
@@ -667,14 +642,12 @@ let currentDocumentName = null;
             `;
             document.head.appendChild(style);
         }
-
         // Enter key support for chat
         document.getElementById('chatInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 sendMessage();
             }
         });
-
         // Load documents on page load
         window.onload = function() {
             loadDocuments();
