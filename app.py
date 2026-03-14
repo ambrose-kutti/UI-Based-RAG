@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, staticfiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import pdfplumber
@@ -23,7 +23,7 @@ class DocumentUpdate(BaseModel):
     content: str
 
 # Ollama settings - DISABLED by default
-OLLAMA_ENABLED = False  # Set to True ONLY if you have Ollama working properly
+OLLAMA_ENABLED = True  # Set to True ONLY if you have Ollama working properly
 OLLAMA_URL = "http://localhost:11434/api/generate"
 OLLAMA_MODEL = "llama3.2"
 
@@ -101,8 +101,10 @@ print_banner()
 @app.get("/")
 def home():
     print(f"[{datetime.now().strftime('%H:%M:%S')}] GET / - Serving portal.html")
-    with open("portal.html", "r", encoding="utf-8") as f:
+    with open("frontend.html", "r", encoding="utf-8") as f:
         return HTMLResponse(content=f.read())
+        
+app.mount("/static", staticfiles.StaticFiles(directory="static"), name="static")    # ADD THIS
 
 def process_single_file(file: UploadFile, file_index: int, total_files: int):  # ADDED FOR MULTI-UPLOAD
     """Process a single file - can be called in parallel"""
@@ -527,7 +529,7 @@ async def delete_ui_document(doc_id: str):
     return {"status": "error", "message": "Document not found in current session"}
 
 # Enhanced Chat endpoint WITHOUT Ollama (simple RAG)
-@app.post("/chat")
+"""@app.post("/chat")
 async def chat(req: ChatRequest):
     print(f"\n[{datetime.now().strftime('%H:%M:%S')}] 💬 CHAT QUERY")
     print(f"Query: '{req.query}'")
@@ -569,15 +571,17 @@ async def chat(req: ChatRequest):
         else:
             # For general questions
             answer = "Based on the uploaded documents:\n\n"
+
             for i, (chunk, metadata) in enumerate(zip(context_chunks[:2], metadatas[:2]), 1):
                 source = metadata.get('source', 'a document')
-                answer += f"**Information from {source}:**\n"
+                answer += f"**Information from {source}:**\n\n"  # Added extra newline for separation
                 # Take the most relevant part of the chunk
                 sentences = chunk.split('. ')
                 relevant_sentences = []
                 query_lower = req.query.lower()
                 for sentence in sentences:
                     if len(sentence.split()) > 3:    # Avoid very short sentences
+
                         if any(word in sentence.lower() for word in query_lower.split()):
                             relevant_sentences.append(sentence.strip() + '.')
                         elif len(relevant_sentences) < 2:    # Take first few sentences
@@ -591,7 +595,7 @@ async def chat(req: ChatRequest):
         return {
             "answer": "Sorry, I encountered an error while searching through the documents. "
                         "Please try again or rephrase your question."
-        }
+        }"""
 
 # Health check
 @app.get("/health")
