@@ -147,3 +147,4 @@ pdfplumber
 chromadb
 python-multipart
 sentence_transformers
+requests

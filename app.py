@@ -1,20 +1,22 @@
-from fastapi import FastAPI, UploadFile, File, staticfiles
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 import pdfplumber
 import chromadb
-from chromadb.config import Settings
-from chromadb.utils import embedding_functions
-from fastapi.responses import HTMLResponse, JSONResponse
+import requests
 import uuid
 import time
 import os
-from datetime import datetime
 import re
-from typing import List, Dict
 import json
 import asyncio
-from concurrent.futures import ThreadPoolExecutor  # ADDED FOR MULTI-UPLOAD
+
+from fastapi import FastAPI, UploadFile, File, staticfiles
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from chromadb.config import Settings
+from chromadb.utils import embedding_functions
+from fastapi.responses import HTMLResponse, JSONResponse
+from datetime import datetime
+from typing import List, Dict
+from concurrent.futures import ThreadPoolExecutor  
 
 # Request schema for chat
 class ChatRequest(BaseModel):
@@ -22,8 +24,8 @@ class ChatRequest(BaseModel):
 class DocumentUpdate(BaseModel):
     content: str
 
-# Ollama settings - DISABLED by default
-OLLAMA_ENABLED = True  # Set to True ONLY if you have Ollama working properly
+# Ollama settings 
+OLLAMA_ENABLED = True 
 OLLAMA_URL = "http://localhost:11434/api/generate"
 OLLAMA_MODEL = "llama3.2"
 
@@ -527,6 +529,60 @@ async def delete_ui_document(doc_id: str):
         if doc["id"] == doc_id:
             print(f"Document exists in persistent storage but not in session: {doc['filename']}")
     return {"status": "error", "message": "Document not found in current session"}
+
+# Enhanced Chat endpoint with Ollama (simple RAG)
+@app.post("/chat")
+async def chat(req: ChatRequest):
+    print(f"\n[{datetime.now().strftime('%H:%M:%S')}] 💬 CHAT QUERY")
+    print(f"Query: '{req.query}'")
+
+    if not collection or collection.count() == 0:
+        return {"answer": "No documents available. Please upload some first."}
+
+    # Retrieve relevant chunks from ChromaDB
+    results = collection.query(
+        query_texts=[req.query],
+        n_results=3,
+        include=["documents", "metadatas"]
+    )
+
+    if not results["documents"] or not results["documents"][0]:
+        return {"answer": "I couldn't find relevant information in the uploaded documents."}
+
+    # Combine chunks into context
+    context = "\n\n".join(results["documents"][0][:3])
+
+    # If Ollama is enabled, send context + query to Ollama
+    if OLLAMA_ENABLED:
+        prompt = f"""
+        You are a helpful assistant. Use the following context from uploaded documents to answer the question clearly and neatly.
+
+        Context:
+        {context}
+
+        Question:
+        {req.query}
+
+        Please provide a concise, well-structured answer with bullet points or short paragraphs.
+        """
+
+        response = requests.post(
+            OLLAMA_URL,
+            json={"model": OLLAMA_MODEL, "prompt": prompt}
+        )
+
+        # Ollama streams responses, so collect them
+        answer = ""
+        for line in response.iter_lines():
+            if line:
+                data = json.loads(line.decode("utf-8"))
+                if "response" in data:
+                    answer += data["response"]
+
+        return {"answer": answer.strip()}
+
+    # Fallback if Ollama not enabled
+    return {"answer": "Ollama is disabled. Please enable it to get clean answers."}
 
 # Enhanced Chat endpoint WITHOUT Ollama (simple RAG)
 """@app.post("/chat")
