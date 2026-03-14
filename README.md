@@ -137,20 +137,11 @@ UI-Based-RAG/
 The application uses environment variables for sensitive information like API keys.
 
 
-
 | Variable                  | Description                                            | Default         | Required |
-
-
-
 |-----------------           |--------------------------------------------------------     |-----------------|----------|
+| `OPENAI_API_KEY`           | Your API key for accessing OpenAI models (GPT, embeddings)| `(None)`        | Yes   |
+| `CHROMA_PERSIST_DIRECTORY` | Directory to persist ChromaDB embeddings. If not set, ChromaDB might operate in-memory| `./chroma_db`(recommended)| No |
 
-
-
-| `OPENAI_API_KEY`           | Your API key for accessing OpenAI models (GPT, embeddings)| `(None)`        | Yes      |
-
-
-| `CHROMA_PERSIST_DIRECTORY` | Directory to persist ChromaDB embeddings. If not set, ChromaDB might operate in-memory| `./chroma_db` (recommended) | No   
-|
 
 ### ChromaDB Persistence
 
