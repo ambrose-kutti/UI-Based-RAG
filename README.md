@@ -71,7 +71,7 @@ Follow these steps to get the UI-Based-RAG application up and running on your lo
 ### Prerequisites
 
 Before you begin, ensure you have the following installed:
--   **Python 3.8+**: The backend is built with Python.
+-   **Python 3.9+**: The backend is built with Python.
 -   **pip**: Python package installer (usually comes with Python).
 
 ### Installation
@@ -219,7 +219,7 @@ We welcome contributions! If you're interested in improving this project, please
 
 ## 📄 License
 
-This project is currently **Unlicensed**. Users are advised to clarify licensing terms with the author for any redistribution or commercial use.
+This project is currently  free of use.
 
 ## 🙏 Acknowledgments
 
