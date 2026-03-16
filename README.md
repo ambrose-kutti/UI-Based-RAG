@@ -11,9 +11,6 @@
 
 **An intuitive web application for document-based Q&A using Retrieval-Augmented Generation (RAG).**
 
-<!-- TODO: Add live demo link if available -->
-<!-- [Live Demo](https://demo-link.com) -->
-
 </div>
 
 ## 📖 Overview
