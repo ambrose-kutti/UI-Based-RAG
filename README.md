@@ -117,11 +117,12 @@ The application consists of two parts: a Python backend (API) and a static HTML/
 ```
 UI-Based-RAG/
 ├── README.md           # This documentation file
-├── backend.py          # Python backend logic (FastAPI application, RAG pipeline)
+├── app.py              # Python backend logic (FastAPI application, RAG pipeline)
 ├── frontend.html       # Static HTML file for the user interface
 ├── requirements.txt    # List of Python dependencies for the backend
-├── script.js           # JavaScript logic for frontend interactivity and API calls
-└── style.css           # CSS file for styling the frontend
+├── static
+    ├── script.js       # JavaScript logic for frontend interactivity and API calls
+    └── style.css       # CSS file for styling the frontend
 ```
 
 ## ⚙️ Configuration
@@ -236,5 +237,3 @@ This project is currently  free of use.
 Made with ❤️ by [ambrose-kutti](https://github.com/ambrose-kutti)
 
 </div>
-```
-
