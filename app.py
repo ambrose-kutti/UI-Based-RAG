@@ -106,9 +106,9 @@ def home():
     with open("frontend.html", "r", encoding="utf-8") as f:
         return HTMLResponse(content=f.read())
         
-app.mount("/static", staticfiles.StaticFiles(directory="static"), name="static")    # ADD THIS
+app.mount("/static", staticfiles.StaticFiles(directory="static"), name="static")
 
-def process_single_file(file: UploadFile, file_index: int, total_files: int):  # ADDED FOR MULTI-UPLOAD
+def process_single_file(file: UploadFile, file_index: int, total_files: int):  # Addef for  MULTI-UPLOAD
     """Process a single file - can be called in parallel"""
     print(f"\n  [{file_index}/{total_files}] Processing: {file.filename}")
     start_time = time.time()
@@ -180,8 +180,7 @@ async def upload_file(file: UploadFile = File(...)):
     print(f"[{datetime.now().strftime('%H:%M:%S')}] 📥 SINGLE FILE UPLOAD")
     print(f"File: {file.filename}")
     start_time = time.time()
-    # Read file content
-    content = await file.read()
+    content = await file.read()     # Read file content
     is_pdf = file.filename.lower().endswith('.pdf')
     # Extract text
     text = ""
@@ -221,11 +220,9 @@ async def upload_file(file: UploadFile = File(...)):
         "file_type": "pdf" if is_pdf else "text",
         "session_id": current_session_id  # ADD THIS
     }
-    # Store in session documents ONLY (not persistent storage)
-    session_documents.append(ui_document)
+    session_documents.append(ui_document)     # Store in session documents ONLY (not persistent storage)
     print(f"Added to session documents: {file.filename} (Session: {current_session_id})")
-    # Also store in persistent storage for backup (optional)
-    ui_documents.append(ui_document)
+    ui_documents.append(ui_document)      # Also store in persistent storage for backup (optional)
     save_ui_documents()
     # Store in ChromaDB for chatbot
     if collection and text.strip():
@@ -251,7 +248,6 @@ async def upload_file(file: UploadFile = File(...)):
                 print(f"Error storing chunk {idx}: {e}")
     end_time = time.time()
     processing_time = end_time - start_time
-    
     print("=" * 60)
     print("UPLOAD COMPLETE")
     print("=" * 60)
@@ -305,10 +301,8 @@ async def upload_multiple_files(files: List[UploadFile] = File(...)):
                 "error": str(result)
             })
         elif result is not None:
-            # Add to session documents
-            session_documents.append(result)
-            # Also add to persistent storage (optional)
-            ui_documents.append(result)
+            session_documents.append(result)    # Add to session documents
+            ui_documents.append(result)     # Also add to persistent storage (optional)
             successful_uploads.append(result)
             print(f"Added to session: {result['filename']}")
     # Save all documents at once
@@ -459,8 +453,7 @@ async def update_ui_document(doc_id: str, update: DocumentUpdate):
                         print(f"Removed {len(results['ids'])} old embeddings")
                 except Exception as e:
                     print(f"Error removing old embeddings: {e}")
-                # Add new embeddings
-                chunk_size = 1000
+                chunk_size = 1000       # Add new embeddings
                 chunks = [update.content[i:i+chunk_size] for i in range(0, len(update.content), chunk_size)]
                 print(f"Creating {len(chunks)} new chunks for updated document")
                 for idx, chunk in enumerate(chunks):
@@ -556,16 +549,12 @@ async def chat(req: ChatRequest):
     if OLLAMA_ENABLED:
         prompt = f"""
         You are a helpful assistant. Use the following context from uploaded documents to answer the question clearly and neatly.
-
         Context:
         {context}
-
         Question:
         {req.query}
-
         Please provide a concise, well-structured answer with bullet points or short paragraphs.
         """
-
         response = requests.post(
             OLLAMA_URL,
             json={"model": OLLAMA_MODEL, "prompt": prompt}
@@ -580,9 +569,7 @@ async def chat(req: ChatRequest):
                     answer += data["response"]
 
         return {"answer": answer.strip()}
-
-    # Fallback if Ollama not enabled
-    return {"answer": "Ollama is disabled. Please enable it to get clean answers."}
+    return {"answer": "Ollama is disabled. Please enable it to get clean answers."} # Fallback if Ollama not enabled
 
 # Enhanced Chat endpoint WITHOUT Ollama (simple RAG)
 """@app.post("/chat")
@@ -715,4 +702,4 @@ async def debug_session():
     }
     
 # for running the app.py file
-# uvicorn backend:app --reload --port 8000
+# uvicorn app:app --reload --port 8000
