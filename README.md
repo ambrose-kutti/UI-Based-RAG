@@ -27,7 +27,6 @@ UI-Based-RAG is an integrated and user-friendly system designed to facilitate na
 
 ## 🖥️ Screenshots
 
-<!-- TODO: Add actual screenshots of the UI, including document upload and chat interaction -->
 <!-- ![Upload Interface](path-to-upload-screenshot.png) -->
 <!-- ![Chat Interface](path-to-chat-screenshot.png) -->
 
