@@ -2,8 +2,6 @@
 
 <div align="center">
 
-<!-- TODO: Add project logo (e.g., an icon representing RAG or chat) -->
-
 [![GitHub stars](https://img.shields.io/github/stars/ambrose-kutti/UI-Based-RAG?style=for-the-badge)](https://github.com/ambrose-kutti/UI-Based-RAG/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/ambrose-kutti/UI-Based-RAG?style=for-the-badge)](https://github.com/ambrose-kutti/UI-Based-RAG/network)
 [![GitHub issues](https://img.shields.io/github/issues/ambrose-kutti/UI-Based-RAG?style=for-the-badge)](https://github.com/ambrose-kutti/UI-Based-RAG/issues)
