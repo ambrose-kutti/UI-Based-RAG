@@ -11,8 +11,6 @@
 
 **An intuitive web application for document-driven Retrieval Augmented Generation (RAG) using Ollama and ChromaDB.**
 
-[Live Demo](https://demo-link.com) <!-- TODO: Add live demo link if available --> |
-[Documentation](https://docs-link.com) <!-- TODO: Add more extensive documentation link if available -->
 
 </div>
 
