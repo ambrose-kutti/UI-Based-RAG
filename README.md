@@ -39,6 +39,9 @@ The system is designed for ease of use, making advanced RAG capabilities accessi
 
 ![Screenshot 2]
 
+<img width="500" height="500" alt="Screenshot 2026-03-14 145319" src="https://github.com/user-attachments/assets/bc218438-8585-4e56-9421-eb5a37888671" />
+
+
 ## 🛠️ Tech Stack
 
 **Frontend:**
