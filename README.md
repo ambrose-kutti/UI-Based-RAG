@@ -33,8 +33,11 @@ The system is designed for ease of use, making advanced RAG capabilities accessi
 
 ## 🖥️ Screenshots
 
-![Screenshot 1](path-to-screenshot) <!-- TODO: Add actual screenshots of the UI (upload, chat) -->
-![Screenshot 2](path-to-screenshot) <!-- TODO: Add more screenshots if desired -->
+![Screenshot 1]
+
+<img width="500" height="500" alt="Screenshot 2026-03-14 124409" src="https://github.com/user-attachments/assets/9798835d-cea0-45f9-8103-427170017d54" />
+
+![Screenshot 2]
 
 ## 🛠️ Tech Stack
 
@@ -131,7 +134,9 @@ UI-Based-RAG/
 ├── app.py              # Main FastAPI backend application, handles API endpoints
 ├── frontend.html       # Single-page HTML frontend for the application
 ├── requirements.txt    # Lists Python dependencies for the backend
-├── static/             # Directory for static assets (e.g., CSS, JavaScript, images, if any)
+├── static/             # Directory for static assets
+      └── script.js
+      └── style.css
 └── .env.example        # Example environment variables for configuration
 ```
 
