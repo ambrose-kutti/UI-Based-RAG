@@ -39,11 +39,11 @@ The system is designed for ease of use, making advanced RAG capabilities accessi
 
 [Screenshot 2]
 
-<img width="500" height="500" alt="Screenshot 2026-03-14 145319" src="https://github.com/user-attachments/assets/bc218438-8585-4e56-9421-eb5a37888671" />
+<img width="1341" height="584" alt="Screenshot 2026-03-14 145319" src="https://github.com/user-attachments/assets/bc218438-8585-4e56-9421-eb5a37888671" />
 
 [Screenshot 3]
 
-<img width="500" height="500" alt="Screenshot 2026-03-14 145349" src="https://github.com/user-attachments/assets/5e3d6333-154e-4466-ad7b-c6c3eed5532c" />
+<img width="1341" height="584" alt="Screenshot 2026-03-14 145349" src="https://github.com/user-attachments/assets/5e3d6333-154e-4466-ad7b-c6c3eed5532c" />
 
 [Screenshot 3]
 
