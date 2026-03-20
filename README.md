@@ -35,13 +35,14 @@ The system is designed for ease of use, making advanced RAG capabilities accessi
 
 **Files Uplaod Page**
 
+
 <img width="1341" height="584" alt="Screenshot 2026-03-14 124409" src="https://github.com/user-attachments/assets/9798835d-cea0-45f9-8103-427170017d54" />
 
 **File Uploading Stage and Progress**
 
 <img width="1341" height="584" alt="Screenshot 2026-03-14 145319" src="https://github.com/user-attachments/assets/bc218438-8585-4e56-9421-eb5a37888671" />
 
-[Screenshot 3]
+**Success Meassage**
 
 <img width="1341" height="584" alt="Screenshot 2026-03-14 145349" src="https://github.com/user-attachments/assets/5e3d6333-154e-4466-ad7b-c6c3eed5532c" />
 
