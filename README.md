@@ -254,7 +254,6 @@ This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LI
 
 ## 📞 Support & Contact
 
--   📧 Email: [contact@example.com] 
 -   🐛 Issues: [GitHub Issues](https://github.com/ambrose-kutti/UI-Based-RAG/issues)
 
 ---
