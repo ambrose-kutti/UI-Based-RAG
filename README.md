@@ -242,7 +242,7 @@ Please ensure your code adheres to good practices and includes appropriate comme
 
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LICENSE) file for details. <!-- TODO: Create a LICENSE file in the repository root if not present -->
+This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LICENSE) file for details. 
 
 ## 🙏 Acknowledgments
 
