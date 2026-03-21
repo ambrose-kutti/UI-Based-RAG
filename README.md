@@ -1,4 +1,4 @@
-# 💬 UI-Based RAG Chatbot
+#  UI-Based RAG Chatbot
 
 <div align="center">
 
