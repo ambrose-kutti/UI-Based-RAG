@@ -262,6 +262,6 @@ This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LI
 
 **⭐ Star this repo if you find it helpful!**
 
-Made with ❤️ by [ambrose-kutti](https://github.com/ambrose-kutti) in 2024
+Made with ❤️ by [ambrose-kutti](https://github.com/ambrose-kutti)
 
 </div>
