@@ -2,7 +2,7 @@
 
 <div align="center">
     
-<img width="100" height="200" alt="Copilot_20260316_110345" src="https://github.com/user-attachments/assets/06efbaa2-ff78-4d34-b7f0-eb4b3a2dd6a1" />
+<img width="200" height="200" alt="Copilot_20260316_110345" src="https://github.com/user-attachments/assets/06efbaa2-ff78-4d34-b7f0-eb4b3a2dd6a1" />
 
 [![GitHub stars](https://img.shields.io/github/stars/ambrose-kutti/UI-Based-RAG?style=for-the-badge)](https://github.com/ambrose-kutti/UI-Based-RAG/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/ambrose-kutti/UI-Based-RAG?style=for-the-badge)](https://github.com/ambrose-kutti/UI-Based-RAG/network)
